@@ -2,14 +2,14 @@
 
 原生 DSH Bundle：自然語言台詞／表演指示 → Fish Audio Drama 3 → 本機有效 WAV → DSH `present` 檔案交付。沒有第二個 LLM、播放器、麥克風、本地模型或 GPU 依賴。
 
-目前為 **0.1.0-rc.1 驗收候選版**。沒有提供 Fish Key，真實雲端音質與完整自然語言流程尚未驗證；詳見 [TEST-RESULTS.md](TEST-RESULTS.md)。
+目前為 **0.1.0-rc.2 驗收候選版**。沒有提供 Fish Key，真實雲端音質與完整自然語言流程尚未驗證；詳見 [TEST-RESULTS.md](TEST-RESULTS.md)。rc.2 補入安裝包內的選用 live-smoke 腳本；語音執行程式與已驗證的 rc.1 相同。
 
 ## 安裝
 
 支援已現場核對的 **DSH 0.2.1-rc.5**，profile **desktop**。其他版本會由 `engines.dsh` 拒絕，需重新驗證後擴大版本範圍。
 
 ```powershell
-& 'E:\DSH\resources\runtime\cli\bin\dsh.cmd' plugin --profile desktop add github:zeola0187/dsh-character-voice-studio
+& 'E:\DSH\resources\runtime\cli\bin\dsh.cmd' plugin --profile desktop add 'github:zeola0187/dsh-character-voice-studio#v0.1.0-rc.2'
 ```
 
 這是目前電腦上的 CLI 絕對路徑。其他電腦可用已加入 PATH 的 `dsh plugin --profile desktop add ...`。私有倉庫使用既有 GitHub/Git Credential Manager 登入，不把 Token 放進 URL。上述 `github:` spec 與 GitHub 首頁 URL 均已由官方 CLI 實測安裝成功，且 Git 安裝後原生工具啟動通過；**插件管理頁直接貼 URL 的 UI 操作尚未驗證**，不要將 CLI 結果當成 UI 驗收。

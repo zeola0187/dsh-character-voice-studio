@@ -1,6 +1,6 @@
 # Verification record — 2026-10-31
 
-Candidate: **0.1.0-rc.1**. Windows, Node 24.14.1, installed DSH **0.2.1-rc.5**. No Fish Key supplied. No private audio was opened or uploaded. No paid Fish or DSH model request was made. No model weights/GPU dependencies were installed. Existing VoxCPM, Seeker, SCEAN and model-provider settings were not modified.
+Candidate: **0.1.0-rc.2**. Windows, Node 24.14.1, installed DSH **0.2.1-rc.5**. No Fish Key supplied. No private audio was opened or uploaded. No paid Fish or DSH model request was made. No model weights/GPU dependencies were installed. Existing VoxCPM, Seeker, SCEAN and model-provider settings were not modified. rc.2 adds the optional live-smoke script to the installed package; runtime code is unchanged from the verified rc.1.
 
 ## Passed
 
@@ -15,11 +15,13 @@ Candidate: **0.1.0-rc.1**. Windows, Node 24.14.1, installed DSH **0.2.1-rc.5**. 
 - Private repository created and pushed: https://github.com/zeola0187/dsh-character-voice-studio . `gh repo view` reports `isPrivate: true`. Existing keyring/Git authorization used; no new token, embedded credential or force push.
 - Official CLI accepted **both** `https://github.com/zeola0187/dsh-character-voice-studio` and `github:zeola0187/dsh-character-voice-studio` in the isolated verification profile. The homepage URL was normalized to a git+https dependency.
 - Actual startup after GitHub installation passed the native tool/no-Key probe (`VOICE_PROFILE_PROBE_PASS`). The test loaded the Git-installed package, not the development link. Initial Git-tested commit: `8d7bf40`.
+- Fixed-tag GitHub installation into the real desktop profile succeeded with `github:zeola0187/dsh-character-voice-studio#v0.1.0-rc.1`, replacing the development link. rc.1 is an explicit candidate tag, not a claim that final cloud/UI acceptance passed.
+- Package dry-run includes all seven executable modules, patch, setup files, config example, documentation and optional live-smoke script; no install-time build and no private material.
 - Tracked-file privacy scan passed: no private audio, actual API credentials, user config, generated audio or test output committed. `.gitattributes` keeps executable source and release files consistent across checkout.
 
 ## Pending
 
-- Desktop UI plugin manager URL-entry test and visible audio delivery/download. The existing DSH window was minimized; the UI tool could not bind it. A request to restore the existing window is pending. No restart/force-close was attempted, and no private chat screenshot was captured.
+- Desktop UI plugin manager URL-entry test and visible audio delivery/download. Initially the existing DSH window was minimized. Later it was restored, but an AX-button action failed with `coordinate input geometry is unavailable`, and keyboard input was rejected with `user input was detected in this window; call get_window_state before continuing`. Read-only refresh was performed; settings were no longer open. A subsequent keyboard action was again blocked by concurrent user input, so UI interaction was stopped. No restart/force-close was attempted, and no private chat screenshot was captured. This is a UI automation limitation/pending interaction, not an automatic approval-review denial.
 - Actual Fish private voice creation, paid Drama 3 WAV response, voice likeness/direction quality, Chinese naturalness: require the user to run setup.cmd, supply Key and an existing reference ID or explicitly selected clean WAV, and confirm rights/cost/upload as applicable.
 - Natural-language DSH model selection→tool→present end-to-end. No separate authorization to spend on a DSH model for this new plugin was inferred from earlier unrelated projects.
 
