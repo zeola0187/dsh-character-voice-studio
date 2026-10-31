@@ -1,38 +1,50 @@
 # Verification record — 2026-10-31
 
-Candidate: **0.1.0-rc.2**. Windows, Node 24.14.1, installed DSH **0.2.1-rc.5**. No Fish Key supplied. No private audio was opened or uploaded. No paid Fish or DSH model request was made. No model weights/GPU dependencies were installed. Existing VoxCPM, Seeker, SCEAN and model-provider settings were not modified. rc.2 adds the optional live-smoke script to the installed package; runtime code is unchanged from the verified rc.1.
+Candidate **0.1.0-rc.3**, Windows, Node 24.14.1, actual DSH **0.2.1-rc.5**. No real Fish Key or private voice material supplied. All audio in automated tests is synthetic. No paid Fish or DSH model requests. No GPU/model installation. Other projects and dsh-fish were not modified by this update.
 
-## Passed
+## Passed in rc.3
 
-- Official CLI local install into the real `desktop` profile; dependency and bundle appended by `dsh plugin`. CLI path: `E:\DSH\resources\runtime\cli\bin\dsh.cmd`.
-- Official CLI local install into `voice-studio-verification` under an isolated project-local DSH_HOME. Actual profile startup loaded the bundle and dispatched `generate_character_audio`; observed `FISH_KEY_REQUIRED` and `VOICE_PROFILE_PROBE_PASS`. No fake registry used for this test. The initial probe ran before asynchronous plugin mounting; waiting for `tools/change` fixed the test timing, then startup passed.
-- 30 offline tests, 30 passed: API headers/body, private multipart creation, transcript, zero API calls for imported ID, 401/402/403/429/500/503, conservative retry, timeout, cancellation, empty/corrupt/truncated WAV, rights/cost/upload gates, Unicode paths, unique atomic outputs, repeated generation, failure recovery, one active job, disabled MP3, unconfigured VoxCPM, configured reference precedence, response bounds, preserving a created reference ID after local persistence failure or cancellation.
-- WAV silence test: two 0.1-second synthetic tone segments plus **88,200 all-zero samples** = **2.2 seconds** at 44,100Hz; the inserted pause is exactly 2 seconds. Mixed sample rate/stereo normalization validated. These are synthetic test tones, not generated speech.
-- Installed DSH Cordis / defineTool / ToolRuntime integration: actual registration and dispatch, synthetic inherited scopes named standard/ptc/cordis, PTC SDK visibility, no-Key result. This checks registry behavior, not full preset UI behavior.
-- Installed `dsh-tool-present` validates an existing one-second WAV and appends `deliverables/presented` using a test session/FS adapter. This is an actual present implementation with an artificial session, not the running Desktop conversation.
-- Read installed rc.5 standard/ptc/cordis preset files: all include `present`; installed web bundle includes `ui-deliverables`. Runtime API differs from current master, and implementation uses rc.5.
-- `npm run check`: runtime JavaScript matches source; no prepare/install-time build.
-- Private repository created and pushed: https://github.com/zeola0187/dsh-character-voice-studio . `gh repo view` reports `isPrivate: true`. Existing keyring/Git authorization used; no new token, embedded credential or force push.
-- Official CLI accepted **both** `https://github.com/zeola0187/dsh-character-voice-studio` and `github:zeola0187/dsh-character-voice-studio` in the isolated verification profile. The homepage URL was normalized to a git+https dependency.
-- Actual startup after GitHub installation passed the native tool/no-Key probe (`VOICE_PROFILE_PROBE_PASS`). The test loaded the Git-installed package, not the development link. Initial Git-tested commit: `8d7bf40`.
-- Fixed-tag GitHub installation into the real desktop profile succeeded with `github:zeola0187/dsh-character-voice-studio#v0.1.0-rc.1`, replacing the development link. rc.1 is an explicit candidate tag, not a claim that final cloud/UI acceptance passed.
-- Package dry-run includes all seven executable modules, patch, setup files, config example, documentation and optional live-smoke script; no install-time build and no private material.
-- Tracked-file privacy scan passed: no private audio, actual API credentials, user config, generated audio or test output committed. `.gitattributes` keeps executable source and release files consistent across checkout.
+- **46/46 offline tests**: original 30 audio/provider/service cases plus 12 settings-store cases and four actual React component tests. API shape, rights/cost/upload gates, cancellation, timeout, 401/402/403/429/5xx, no paid POST retry, corrupt/empty WAV, Unicode, unique atomic files, consecutive generation, busy release, MP3 rejection, optional VoxCPM error retained.
+- Secret lifecycle: no plaintext Key in settings get/save response or tools; blank keep preserves existing Key; replace works; clear disables environment fallback; unrelated saves do not persist environment Key; stale revisions rejected.
+- WAV picker workflow: browser preflight and host validation, bounded 20MB upload to local staging only, receipt without absolute path, no Fish call on selection, name and explicit rights/upload/cost confirmation before private creation, successful Mock creation becomes default, original file unchanged. GUI consent does not globally authorize model-requested uploads. An uncertain paid result cannot reuse the same receipt.
+- React component tests exercise actual input/button handlers, password masking, no prefilled Key, save status, explicit delete confirmation, file selection, confirmation gates and default voice update. These use react-test-renderer, not a real desktop picker/window.
+- Official CLI isolated profile `voice-studio-verification` (project-local DSH_HOME, base + this plugin only) starts the actual installed Host. No dsh-fish or desktop inheritance.
+- Real Host clientModules graph discovers the immediately loaded plugin and settings dependencies. The **actual rc.5 ModuleLoader** materializes compiled lib/client.js through **actual fetchBundle**.
+- Strict host Typert descriptor mounts. **Actual Typert Gateway dispatch** handles save/get/clear via a synthetic owner peer, exercises Cordis invocation context and redaction. Non-owner and absent invocation rejected. No network authentication is forged or changed: the peer is a test input in the isolated process.
+- Client entry registers both settings.section / character-voice and plugins.bundle.config / dsh-character-voice-studio, plus Chinese/English dictionary, using test client slots/locale adapters. Native probe prints **VOICE_SETTINGS_PROFILE_PROBE_PASS**; evidence in ignored test-output/settings-profile-probe.json. This is native module/Gateway integration, not proof of visual desktop navigation.
+- During probe development, adding Gateway/access services already present in base caused duplicate-service warnings; extra test rows were removed. A too-early strict-schema assertion was fixed to wait for documented asynchronous Typert loader registration. The clean final probe passes.
+- Exact silence: 88,200 all-zero samples = **2 seconds** at 44,100Hz between two 0.1-second synthetic tones; result 2.2 seconds. Mixed rates/stereo normalization tested.
+- Build/check validates all source and committed lib counterparts, exact generated client bundle, package exports, settings patch wiring, and no prepare step.
+- npm pack dry-run includes all backend modules, compiled client, patch, fallback setup, example config and user-run live smoke. No audio/config/credentials packaged.
+- npm audit production dependencies: **0 vulnerabilities**. Plugin zod pinned to 4.6.7; Host dependencies untouched.
+- After the push rejection, completed independent local packaging verification: official CLI installed dsh-character-voice-studio-0.1.0-rc.3.tgz into a **fresh** voice-ui-package-verification profile. Actual packaged node_modules client asset passed ModuleLoader + strict schema + Gateway save/get/clear probe. Evidence: test-output/settings-profile-probe-packed-fresh.json. No development symlink was used for this final run. The earlier reused profile retained a development symlink and is not counted as packed-install evidence.
+- Tested local archive SHA256: E26056B40F2645436223733A7E075FD8F77C64284153BC0EF7F6AD74EEA0CF17. Archive includes the code and report as of packaging; this later verification entry exists in the workspace report. No rc.3 Git tag exists yet.
 
-## Pending
+## Earlier baseline evidence retained
 
-- Desktop UI plugin manager URL-entry test and visible audio delivery/download. Initially the existing DSH window was minimized. Later it was restored, but an AX-button action failed with `coordinate input geometry is unavailable`, and keyboard input was rejected with `user input was detected in this window; call get_window_state before continuing`. Read-only refresh was performed; settings were no longer open. A subsequent keyboard action was again blocked by concurrent user input, so UI interaction was stopped. No restart/force-close was attempted, and no private chat screenshot was captured. This is a UI automation limitation/pending interaction, not an automatic approval-review denial.
-- Actual Fish private voice creation, paid Drama 3 WAV response, voice likeness/direction quality, Chinese naturalness: require the user to run setup.cmd, supply Key and an existing reference ID or explicitly selected clean WAV, and confirm rights/cost/upload as applicable.
-- Natural-language DSH model selection→tool→present end-to-end. No separate authorization to spend on a DSH model for this new plugin was inferred from earlier unrelated projects.
+- Official CLI path: `E:\DSH\resources\runtime\cli\bin\dsh.cmd`; real profile: `desktop`. rc.2 was installed via `github:zeola0187/dsh-character-voice-studio#v0.1.0-rc.2`.
+- Actual Git-installed native tool registration/dispatch and no-Key result passed in isolated profile, **VOICE_PROFILE_PROBE_PASS**.
+- Installed Cordis / defineTool / ToolRuntime tests cover inherited standard/ptc/cordis scopes and PTC SDK. Installed present implementation validates one-second WAV and appends deliverables/presented with artificial session/FS adapter. This is not the real desktop conversation.
+- Installed rc.5 presets all include present; web bundle includes ui-deliverables.
+- Private repository https://github.com/zeola0187/dsh-character-voice-studio ; existing GitHub/GCM authorization only, no embedded credential, force push or public repository.
+- Both GitHub homepage URL and github: spec accepted by official CLI. UI manager paste/click path not verified.
+
+## Pending / not claimed
+
+- rc.3 Git push/tag and real desktop deployment are **blocked/pending**. Auto approval review rejected the combined git commit + push to private main because it did not recognize trusted user authorization for this push. The command was not executed; confirmed HEAD remains e691f82bb492b029ba085956130c24f52dbd7eaf and rc.3 changes are staged locally. No retry, alternate push, force push, tag or desktop install was attempted after rejection. Existing real desktop remains rc.2. Await a new, relevant authorization clarification before retrying that rejected action.
+- **Real desktop settings UI and file picker end-to-end**. Source/component/native loader/host RPC tests passed, but no screenshot or desktop click validation. Prior automation encountered geometry/concurrent-input limits. Parent reports another task's whole-window screenshot was denied for private-chat exposure; this update does not retry or bypass that capture. No restart is authorized for this update.
+- True Fish private voice creation and paid Drama 3 audio response; likeness, expression, Chinese naturalness, long-text stability. No Key/material/paid authorization supplied.
+- Natural-language DSH model → voice tools → real conversation present/download flow. No unrelated model-spend authorization reused.
+- Final v0.1.0 intentionally withheld. RC is installable candidate code, not a claim that real audio or visual UI acceptance is complete.
 
 ## Reproduce
 
-`npm run build`, `npm test`, `npm run check`. Native host integration: set `ELECTRON_RUN_AS_NODE=1` and `DSH_TEST_MODULES` to the installed DSH `dsh/node_modules` directory; launch `test/native-host.cjs` with the installed Electron executable using `--expose-internals`. The test output stays gitignored.
+`npm run build`, `npm test`, `npm run check`. Native settings probe: use an isolated base + voice profile, add test-only patch rows for @deepseek-ai/dsh-client-modules and test/settings-profile-probe.js, set DSH_CHARACTER_VOICE_CONFIG to an isolated empty test config and DSH_VOICE_SETTINGS_PROBE_RESULT to an output JSON. Run official CLI with --profile and --patch. It exits only its own test process and makes no model/Fish request.
 
-The official CLI probe is `test/profile-probe.js`, loaded by an extra test-only `--patch` row into the isolated verification profile. Set `DSH_CHARACTER_VOICE_CONFIG` to a missing/empty test config and `DSH_VOICE_PROBE_RESULT` to a writable output JSON. It calls no model and exits only its own test process.
+Original native integration: run test/native-host.cjs with installed Electron in ELECTRON_RUN_AS_NODE mode, --expose-internals and DSH_TEST_MODULES pointing to installed dsh/node_modules. Test outputs stay ignored.
 
-For the next real cloud test, finish local setup, then use the README's third natural-language prompt in DSH. Alternatively run `scripts/live-smoke.mjs --confirm-paid` from a user workspace; that creates a real WAV and reports its duration, but does not alone validate DSH present UI. Never claim the offline tones as cloud results.
+Next user step: **DSH 設定 → 角色語音 → 填 Key 並儲存 → 選 WAV、命名與本人確認 → 建立私人聲線並設預設**. Then use README's exact-pause conversational prompt. Alternatively run scripts/live-smoke.mjs --confirm-paid from a user workspace; this generates a real WAV but alone does not validate present UI.
 
-## Known limits
+## Limits
 
-WAV-only MVP; MP3 fails before billing. Maximum 20 segments, 1500 chars per segment/6000 total. Linear resampling is only a compatibility path; requests ask Fish for mono PCM16/44.1kHz. Explicit inserted silence is exact, but model-generated natural silence can add to the audible interval. Partial successes can incur charges even if a later segment fails; no automatic paid retry. Optional VoxCPM endpoint is an unimplemented extension boundary, explicitly reported as such. No v0.1.0 final tag is claimed before the relevant acceptance work is complete.
+Key stored in a local configuration file, not encrypted OS credential storage. Owner account/filesystem must be protected. Abandoned staged WAV copies may remain under local imports; successful creation/discard removes its copy, never the original. Unknown paid outcomes require checking Fish before retry. WAV-only; MP3 and optional VoxCPM synthesis are explicitly unavailable. Max 20 segments / 6000 total characters. Linear resampling is a compatibility fallback. Explicit added silence is exact; natural model pauses can add duration. No statement about real voice quality is supported by synthetic tests.

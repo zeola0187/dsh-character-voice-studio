@@ -4,7 +4,7 @@ Write-Host 'Character Voice Studio - Fish Audio Drama 3'
 Write-Host 'Key stays in a local file. Do not paste it in DSH chat.'
 $voiceConfig = if (Test-Path -LiteralPath $voiceConfigPath) { Get-Content -LiteralPath $voiceConfigPath -Raw | ConvertFrom-Json } else { Get-Content -LiteralPath (Join-Path $PSScriptRoot 'config.example.json') -Raw | ConvertFrom-Json }
 $voiceSecret = Read-Host 'Fish API Key (blank keeps current)' -AsSecureString
-if ($voiceSecret.Length -gt 0) { $voicePointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($voiceSecret); try { $voiceConfig.fishApiKey = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($voicePointer) } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($voicePointer) } }
+if ($voiceSecret.Length -gt 0) { $voicePointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($voiceSecret); try { $voiceConfig | Add-Member -NotePropertyName fishApiKey -NotePropertyValue ([Runtime.InteropServices.Marshal]::PtrToStringBSTR($voicePointer)) -Force; $voiceConfig | Add-Member -NotePropertyName fishApiKeyDisabled -NotePropertyValue $false -Force } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($voicePointer) } }
 $voiceRef = Read-Host 'Default Fish reference_id (blank keeps current; can import WAV later)'
 if ($voiceRef) { $voiceConfig.defaultReferenceId = $voiceRef; $voiceConfig.defaultProfile = '' }
 $voiceConfig.rightsConfirmed = (Read-Host 'I have necessary voice/material rights. Type YES to confirm') -ceq 'YES'

@@ -33,7 +33,7 @@ export function validateRequest(a,c={}){
 }
 export class VoiceStudio {
   constructor({configFile,providerFactory=c=>new FishProvider(c)}={}){this.configFile=configFile;this.providerFactory=providerFactory;this.busy=false;}
-  async list(){try{const c=await readConfig(this.configFile);return {success:true,profiles:await profiles(c),default_profile:c.defaultProfile||'',default_reference_id:c.defaultReferenceId||'',configured:!!c.fishApiKey,rights_confirmed:c.rightsConfirmed===true,paid_requests_enabled:c.allowPaidRequests===true};}catch(e){return resultError(e);}}
+  async list(){try{const c=await readConfig(this.configFile);return {success:true,profiles:await profiles(c),default_profile:c.defaultProfile||'',default_reference_id:c.defaultReferenceId||'',configured:!!c.fishApiKey,rights_confirmed:c.rightsConfirmed===true,paid_requests_enabled:c.allowPaidRequests===true,setup_hint:'沒有聲線時，請引導使用者開啟 DSH 設定 → 角色語音，選擇 WAV 並本人確認建立；不需要輸入路徑或 ID。'};}catch(e){return resultError(e);}}
   async exclusive(fn){if(this.busy)return {success:false,error_code:'BUSY',error_message:'已有語音工作進行中，請等待或取消。'};this.busy=true;try{return await fn();}catch(e){return resultError(e);}finally{this.busy=false;}}
   async create(a,{signal,cwd}={}){return this.exclusive(async()=>{
     signal?.throwIfAborted();const c=await readConfig(this.configFile),name=textField(a.name,80,'聲線名稱',true);
@@ -60,7 +60,7 @@ export class VoiceStudio {
     const all=await profiles(c),selected=a.voice_profile||c.defaultProfile;
     const profile=selected?all.find(p=>p.name===selected||p.reference_id===selected):(!c.defaultReferenceId?all[0]:undefined);
     const referenceId=profile?.reference_id||(!selected?c.defaultReferenceId:undefined);
-    if(!referenceId)fail('VOICE_PROFILE_REQUIRED','請先匯入 reference_id 或用乾淨 WAV 建立聲線，再選定聲線。');
+    if(!referenceId)fail('VOICE_PROFILE_REQUIRED','請先到 DSH「設定 → 角色語音」選擇乾淨 WAV，建立角色並設為預設；不需要輸入路徑或 reference_id。');
     const output=path.resolve(cwd,c.outputDirectory||'generated_audio');
     const packageRoot=path.resolve(import.meta.dirname,'..').toLowerCase(),lowerOutput=output.toLowerCase();
     if(output.split(path.sep).some(p=>p.toLowerCase()==='node_modules')||lowerOutput===packageRoot||lowerOutput.startsWith(packageRoot+path.sep))fail('OUTPUT_DIRECTORY_INVALID','輸出目錄必須位於工作區或使用者設定目錄，不得寫到插件或 node_modules。');

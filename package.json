@@ -1,15 +1,72 @@
 {
   "name": "dsh-character-voice-studio",
-  "version": "0.1.0-rc.2",
+  "version": "0.1.0-rc.3",
   "private": true,
   "description": "Native DSH character voice file generation with Fish Audio Drama 3",
   "type": "module",
   "main": "lib/plugin.js",
-  "exports": {".": "./lib/plugin.js", "./package.json": "./package.json"},
-  "files": ["lib", "scripts/live-smoke.mjs", "cordis.patch.yml", "config.example.json", "setup.ps1", "setup.cmd", "README.md", "TEST-RESULTS.md"],
-  "engines": {"node": ">=24.14.1", "dsh": "0.2.1-rc.5"},
-  "dsh": {"bundle": {"patch": "./cordis.patch.yml"}},
-  "peerDependencies": {"@deepseek-ai/dsh-tools": "0.2.1-rc.5"},
-  "peerDependenciesMeta": {"@deepseek-ai/dsh-tools": {"optional": true}},
-  "scripts": {"build": "node scripts/build.mjs", "test": "node --test test/*.test.js", "check": "node scripts/check.mjs", "smoke:live": "node scripts/live-smoke.mjs"}
+  "exports": {
+    ".": "./lib/plugin.js",
+    "./settings": "./lib/settings-plugin.js",
+    "./client": "./lib/client.js",
+    "./typert": "./lib/settings-typert.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "scripts/live-smoke.mjs",
+    "cordis.patch.yml",
+    "config.example.json",
+    "setup.ps1",
+    "setup.cmd",
+    "README.md",
+    "TEST-RESULTS.md"
+  ],
+  "engines": {
+    "node": ">=24.14.1",
+    "dsh": "0.2.1-rc.5"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-ui-plugin-manager"
+      ],
+      "external": [
+        "react",
+        "zod"
+      ]
+    }
+  },
+  "dependencies": {
+    "zod": "4.6.7"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-tools": "0.2.1-rc.5",
+    "@deepseek-ai/dsh-typert-protocol": "0.2.1-rc.5"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/dsh-tools": {
+      "optional": true
+    },
+    "@deepseek-ai/dsh-typert-protocol": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.js",
+    "check": "node scripts/check.mjs",
+    "smoke:live": "node scripts/live-smoke.mjs"
+  },
+  "devDependencies": {
+    "react": "18.3.1",
+    "react-test-renderer": "18.3.1"
+  }
 }

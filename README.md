@@ -1,84 +1,88 @@
 # DSH Character Voice Studio
 
-原生 DSH Bundle：自然語言台詞／表演指示 → Fish Audio Drama 3 → 本機有效 WAV → DSH `present` 檔案交付。沒有第二個 LLM、播放器、麥克風、本地模型或 GPU 依賴。
+DSH 原生插件：自然語言台詞與表演指示 → Fish Audio Drama 3 → 有效 WAV → DSH `present` 檔案交付。沒有第二個 LLM、播放器、麥克風或本機 GPU 推論。
 
-目前為 **0.1.0-rc.2 驗收候選版**。沒有提供 Fish Key，真實雲端音質與完整自然語言流程尚未驗證；詳見 [TEST-RESULTS.md](TEST-RESULTS.md)。rc.2 補入安裝包內的選用 live-smoke 腳本；語音執行程式與已驗證的 rc.1 相同。
+目前是 **0.1.0-rc.3 候選版**，加入原生設定與 WAV 選檔建聲線流程。真實 Fish 音訊與日常桌面 UI 端到端仍待驗證，詳見 [TEST-RESULTS.md](TEST-RESULTS.md)。
 
 ## 安裝
 
-支援已現場核對的 **DSH 0.2.1-rc.5**，profile **desktop**。其他版本會由 `engines.dsh` 拒絕，需重新驗證後擴大版本範圍。
+支援已核實的 **DSH 0.2.1-rc.5**。**rc.3 尚未推送／建立 tag**：自動核准審查阻擋提交與推送，等待補足授權。下方是發行後預定字串，目前請勿當作已驗證可安裝版本。遠端仍為 rc.2（尚無此設定頁）；rc.3 本機資料夾與打包檔已具備編譯資產。私有倉庫需要擁有存取權的 GitHub 帳號與既有 Git Credential Manager 登入，不要在 URL 放 Token。
 
-```powershell
-& 'E:\DSH\resources\runtime\cli\bin\dsh.cmd' plugin --profile desktop add 'github:zeola0187/dsh-character-voice-studio#v0.1.0-rc.2'
+```text
+github:zeola0187/dsh-character-voice-studio#v0.1.0-rc.3
 ```
 
-這是目前電腦上的 CLI 絕對路徑。其他電腦可用已加入 PATH 的 `dsh plugin --profile desktop add ...`。私有倉庫使用既有 GitHub/Git Credential Manager 登入，不把 Token 放進 URL。上述 `github:` spec 與 GitHub 首頁 URL 均已由官方 CLI 實測安裝成功，且 Git 安裝後原生工具啟動通過；**插件管理頁直接貼 URL 的 UI 操作尚未驗證**，不要將 CLI 結果當成 UI 驗收。
+官方 CLI 備用安裝方式（本機實際路徑與 profile）：
 
-倉庫已包含可執行 `lib/*.js`，Git 安裝不需 build/prepare，不使用原生音訊依賴。`src/*.js` 是 ESM 原始碼，`npm run build` 將其精確複製成發布產物；`npm run check` 確認無過期產物。套件僅共享 Host 的 `@deepseek-ai/dsh-tools` optional peer。
+```powershell
+& 'E:\DSH\resources\runtime\cli\bin\dsh.cmd' plugin --profile desktop add 'github:zeola0187/dsh-character-voice-studio#v0.1.0-rc.3'
+```
 
-## 第一次設定
+其他電腦可使用 PATH 中的 `dsh`。包含已編譯後端 JS 與 `lib/client.js`；Git 安裝不執行 build/prepare，不下載模型或原生音訊依賴。其他 DSH 版本需另驗；CLI 安裝結果不等同插件管理器實際點擊驗收。
 
-在插件資料夾雙擊 **setup.cmd**，或 PowerShell 執行 `setup.ps1`。Key 使用遮罩輸入，不要貼進 DSH 對話。設定存放在：
+## 第一次使用：在 DSH 設定完成
+
+1. 開啟 **設定 → 角色語音**。插件管理器中此插件的設定區也使用同一頁。
+2. 輸入 **Fish Audio API Key**，本人確認素材使用權與可能費用，再按「儲存設定」。既有 Key 只顯示已設定，不回填原值；留空儲存會保留，另按「移除 Key」才會刪除。設定立即生效。
+3. 按 **選擇 WAV**，用系統選檔視窗選乾淨人聲：**PCM16 WAV、3–120 秒、20MB 以下，單／雙聲道**。選檔只驗證並暫存副本到連線的 DSH 主機，**不會傳給 Fish**，不改原檔。
+4. 填角色名稱，例如「溫柔晚安角色」。本人確認這段聲音的使用權、這次上傳與可能費用，按 **建立私人聲線並設為預設**。Fish 會收到該 WAV；建立使用 `visibility=private`、`generate_sample=false`。
+5. 回 DSH 直接說台詞、語氣和停頓需求。成功後交付 WAV，可下載或用系統播放器開啟。
+
+不需要知道路徑、reference ID 或 JSON。已有 Fish 聲線可在「進階」輸入名稱與 ID 匯入，這一步不呼叫 Fish。預設輸出目前 DSH 工作區的 `generated_audio`；進階可改資料夾。聲線下拉選單可換預設。
+
+GUI 建立成功會保存聲線、設為預設，並記錄本人允許後續按其指令生成與可能費用；**不會開放模型任意上傳其他 WAV**。刪除本機聲線記錄不刪原始 WAV 或 Fish 遠端聲線。
+
+原生設定使用 rc.5 官方 settings.section、plugins.bundle.config、ModuleLoader 和 Typert RPC。早期只有 CMD 是實作範圍選擇，不是 DSH 無法提供原生頁面。`setup.cmd`／`setup.ps1` 僅保留作進階排障備用。
+
+## 三句對話範例
+
+1. 請用預設角色，逐字說出「你好，很高興見到你。」，不要添加語氣，生成 WAV 並交付檔案。
+2. 請用預設角色，以溫柔、慢速、略帶疲倦的語氣，逐字說出「今天辛苦了。先把肩膀放鬆，好嗎？晚安。」。表演指示放 direction，不要當台詞念，生成 WAV 並交付檔案。
+3. 請用預設角色溫柔地說「今天辛苦了。晚安。」，分成「今天辛苦了。」和「晚安。」兩段，第二段之前額外插入精確兩秒靜音，第一段不要重複加停頓，生成 WAV 並交付檔案。
+
+DSH 負責理解自然語言與分段。自訂語氣由 `direction` 轉成 Fish Drama 3 的 `[語氣]台詞`。模型效果仍需真人聆聽，不能保證任意指令都完全實現。
+
+## 本機資料與權限
+
+資料位於 DSH 主機使用者目錄：
 
 ```text
 %USERPROFILE%\.dsh-character-voice-studio\config.json
+%USERPROFILE%\.dsh-character-voice-studio\profiles.json
+%USERPROFILE%\.dsh-character-voice-studio\imports\
 ```
 
-可先輸入既有 Fish `reference_id`。若要用 WAV 建立聲線，可以留空，接著在 DSH 呼叫 `create_voice_profile`。聲線清單在同目錄 `profiles.json`，不會進 Git。設定每次工具呼叫重新讀取，改 Key 不需要重啟。手動設定可參考 `config.example.json`；`DSH_CHARACTER_VOICE_CONFIG` 可指定另一個絕對設定檔路徑。只支援本插件明確的 `FISH_API_KEY` 環境變數，不搜尋或挪用其他服務憑證。
+imports 保存所選 WAV 副本，成功建立或按移除選檔時清除該副本。關閉頁面、中斷或不確定失敗可能留下副本，可由本人在該目錄清理，不影響原檔。選檔回執只有檔名與音訊資訊，私人絕對路徑不傳給 LLM。
 
-本人須確認三個開關：
+Key 保存本機設定，**不是 OS 密碼庫加密儲存**，請保護該使用者帳號。設定 RPC 僅接受 DSH owner 連線；回應、工具、LLM 提示與日誌不回傳 Key。清除 Key 同時停用 `FISH_API_KEY` 回退，避免清除後仍付費；輸入新 Key 可重新啟用。私人設定、素材與生成結果均不提交 Git。
 
-- `rightsConfirmed`：擁有聲音、素材必要使用權限。
-- `allowPaidRequests`：允許台詞與表演指示傳給 Fish，並接受可能費用。
-- `allowReferenceUpload`：允許將自己指定的參考 WAV 傳給 Fish 建立私人聲線。
+`DSH_CHARACTER_VOICE_CONFIG` 可指定替代設定檔；只接受本人提供的 Fish Key／`FISH_API_KEY`，不搜尋其他服務憑證。手動格式見 config.example.json。`rightsConfirmed`、`allowPaidRequests` 由本人設定，模型工具不能修改。`allowReferenceUpload` 僅供進階工具上傳，預設關閉；GUI 採單次選檔明確確認。
 
-開關只由使用者在本機設定，不接受模型工具參數假冒同意。輸入 Key 本身不等同同意費用或上傳。建立聲線固定 `visibility=private`、`generate_sample=false`；不將私人素材上傳 GitHub。私人是 Fish 帳號內的可見性，Fish 仍會收到指定素材。
+## 原生工具
 
-可手動設定 `defaultProfile`、`defaultReferenceId`、`outputDirectory`（空白時使用 DSH 工作區下 `generated_audio`）、`defaultFormat`（使用 wav）。`defaultProfile` 優先，否則使用 `defaultReferenceId`，都空白才使用第一個本機 profile。
+- `list_voice_profiles()`：可用角色與設定引導，不回傳 Key。
+- `create_voice_profile({name,reference_id})`：本機匯入 ID。
+- `create_voice_profile({name,path,transcript?})`：進階上傳工具，需本人在設定另允許指定素材上傳；一般使用者用設定頁選檔。
+- `check_voice_connection()`：GET 檢查預設聲線，不生成音訊。
+- `generate_character_audio({text,direction?,voice_profile?,segments?,format?,output_name?})`：生成有效 WAV，回傳位置；DSH 再以 `present({files:[{path:file_path,description:'角色語音 WAV'}]})` 交付。內嵌播放器不是成功條件。
 
-## 工具
+工具遵守 DSH scope/restrictions，沒有放寬檔案權限或改其他插件。rc.5 standard/ptc/cordis 均包含 present，web bundle 有 ui-deliverables；自訂 preset 需自行包含 present。
 
-`list_voice_profiles()`：離線列出聲線與就緒狀態，不回傳 Key。
+## 音訊、限制與錯誤
 
-`create_voice_profile({name, reference_id})`：匯入已有 ID，不呼叫 API。
+照念保留原文；segments 各段 text 接起來必須和總 text 完全相同。省略分段 direction 時沿用主 direction。Fish 使用 normalize:false。台詞的 `[]<>` 保留符號會拒絕，避免與指令混淆。
 
-`create_voice_profile({name, path, transcript?})`：上傳使用者指定的乾淨 **3–120 秒、20MB 以下 PCM16 WAV**，可選逐字稿。名稱不可覆蓋既有 profile；相同 ID 可以另取名稱。若遠端成功但本機儲存失敗，會回傳 ID 讓使用者匯入，避免再次建立。
+明確停頓插入全零音訊樣本，pause_after_ms 和下一段 pause_before_ms 相加。**保證額外插入的靜音長度**；模型自然停頓可能使可聽間隔更長。每段驗證 PCM16 WAV，統一單聲道 44.1kHz，不同採樣率用線性重採樣，接點 2ms 淡入淡出。唯一安全檔名、原子寫入與讀回驗證避免覆寫與損壞。
 
-`check_voice_connection()`：GET 檢查預設聲線認證與狀態，不生成語音。
+限制：6000 總字元、每段 1500、最多 20 段、每段語氣 500 字元；單一停頓 30 秒／總停頓 120 秒、總音訊 10 分鐘。WAV-only MVP；MP3 在 API 前明確拒絕，不下載來源不明 FFmpeg。
 
-`generate_character_audio({text, direction?, voice_profile?, segments?, format?, output_name?})`：產生有效 WAV 後回傳完整路徑、檔名、格式、時長、聲線、段數與靜音取樣範圍。成功後 **DSH 要接著呼叫 `present({files:[{path:file_path,description:'角色語音 WAV'}]})`**。檔案交付卡通常在回合結束時出現。若沒有內嵌播放器，下載／用本機程式開啟即可。
+同時一個生成任務；401/402/403/429/5xx、逾時、取消、空／壞 WAV 有明確錯誤，失敗釋放 busy。付費 POST **不自動重試**；只讀 GET 對 429/502/503/504 最多再試一次。已送出的請求取消後仍可能計費。多段中途失敗回報完成段數，不交付假完整音訊。
 
-工具掛在全域 registry，遵守 Host 的 scope/restrictions，供 standard、ptc、cordis 三條預設路徑繼承；PTC 使用 `tools.generate_character_audio(...)`。三種 rc.5 官方 preset 皆包含 present，web bundle 包含 ui-deliverables。本插件不修改既有 preset、不放寬權限、不覆寫其他插件限制。自訂 preset 若不提供 present，應透過官方設定加入 present 後使用。
+建聲線結果不確定時，不允許同回執重送，先查 Fish 帳號。遠端建成而本機儲存失敗會顯示恢復用 reference ID。原始服務錯誤不進工具輸出或控制台，避免夾帶秘密／私人文字。
 
-### 語氣、原文與停頓
+## 可選 VoxCPM 與測試
 
-DSH 負責理解自然語言與撰稿。要求「照念」時 text 不可改字；direction 獨立於台詞，由 Provider 組成 `[語氣]台詞`。`normalize:false` 避免 Fish 文字正規化改寫內容。生成模型仍可能念錯或誤讀，需要真人聽驗。
-
-若提供 segments，每段 text 依序連接必須與完整 text 完全一致，包括標點與空白。每段可設定 direction，省略時沿用主 direction。明確停頓會在 WAV 內插入真正零振幅取樣；`pause_after_ms` 與下一段 `pause_before_ms` **相加**，不要重複指定同一停頓。模型自身也可能有自然停頓，所以能保證的是額外插入兩秒數位靜音，不是兩句可聽語音之間恰好只有兩秒。
-
-各段 WAV 驗證 RIFF/chunk 大小及 PCM16，必要時統一單聲道 44.1kHz；不修剪語音，兩端使用 2ms 淡入淡出抑制接點爆音。不同取樣率採線性重取樣；正式請求固定要求 44.1kHz，通常不需重取樣。
-
-限制：完整 text 最多 6000 字元，每段最多 1500，最多 20 段；每段語氣最多 500；單一停頓 30 秒，總明確停頓 120 秒；總音訊 10 分鐘。台詞不接受 `[]<>` 控制標籤字元，避免原文與指令歧義。若必須唸出這類符號，先由使用者決定口語寫法。Windows 安全檔名＋時間＋隨機 ID，不覆蓋舊輸出。
-
-首版 `mp3` 會在呼叫 API 前回報 `FORMAT_UNAVAILABLE`，請選 wav。沒有自動下載 FFmpeg 或來路不明 binary。
-
-### 三句可直接使用的提示詞
-
-1. 請使用預設角色聲線，逐字念出「你好，很高興見到你。」，不要添加語氣，生成 WAV 並用 present 交付檔案。
-2. 請用預設角色聲線，以溫柔、慢速、略帶疲憊的語氣，逐字念出「今天辛苦了。先閉上眼睛，好嗎？晚安。」，把表演指示放 direction，生成 WAV 並交付檔案。
-3. 請逐字念出「今天辛苦了。晚安。」，語氣溫柔慢速，分成「今天辛苦了。」與「晚安。」兩段，在第二段設定 pause_before_ms=2000，第一段不要重複加停頓；生成 WAV 並用 present 交付。
-
-## 故障與取消
-
-同時一項工作；DSH 取消訊號會傳給網路下載與檔案讀取。已發送的請求取消後仍可能計費。付費 POST **從不自動重試**；429、401/402/403、5xx、空音訊、格式錯誤、斷線與逾時均回傳不同 error_code。只讀 GET 的 429/502/503/504 最多額外重試一次，退避 500ms。失敗後 busy 會釋放。部分段落成功後若失敗，回報 completed_segments，但不交付不完整音檔；重試前留意先前段落可能已計費。
-
-缺 Key、未確認權利、未同意費用、未允許上傳時，在呼叫雲端前停止。原始服務錯誤本文不進工具輸出或日誌，以免 Key 或私人文字被回顯。輸出先驗證、暫存寫入、原子 rename、再讀回驗證。
-
-## 可選 VoxCPM Cloud
-
-`cloudVoxCPM` 設定與 `CloudVoxCPMProvider` extension boundary 已預留。無端點回報 `VOXCPM_NOT_CONFIGURED`；即使填 URL，在該服務 schema 尚未驗證及實作前回報 `VOXCPM_ADAPTER_REQUIRED`。**目前不是已完成的雲端 VoxCPM 整合**，不租 GPU、不傳參考素材到任意 URL。路徑 A 的 Fish WAV 匯入與 TTS 獨立運作。
-
-## 測試與下一步
+cloudVoxCPM／CloudVoxCPMProvider 僅保留擴充邊界：未設回 VOXCPM_NOT_CONFIGURED，填 URL 仍回 VOXCPM_ADAPTER_REQUIRED，**目前不是可用 VoxCPM 整合**。不租 GPU、不公開上傳，不影響獨立 Fish 流程。
 
 ```powershell
 npm run build
@@ -86,21 +90,12 @@ npm test
 npm run check
 ```
 
-`test/native-host.cjs` 使用已安裝 DSH 的真 Cordis/tools/present 套件，配合人工 session、檔案 adapter，不呼叫 LLM/Fish。這不等於正式 Desktop UI 驗收。真實付費生成可在本人完成設定後執行：
+本人填 Key、建立聲線、確認權利／費用後，可用第三句對話驗證完整流程。進階可在使用者工作區執行 `node '<插件資料夾>\scripts\live-smoke.mjs' --confirm-paid`；這不單獨代表 DSH UI 驗收。詳細實測與未驗項目見測試報告。
 
-```powershell
-# 在使用者的 DSH 工作區執行，不在插件目錄輸出
-node '<插件資料夾>\scripts\live-smoke.mjs' --confirm-paid
-```
+## 官方依據（核實日 2026-10-31）
 
-DSH 自然語言→工具→present 的真人流程，使用上面第三句提示詞一次完成；需既有 DSH 模型與 Fish 帳號可用，且本人允許這些呼叫。
-
-## 官方依據（核對日期：2026-10-31）
-
-- [DSH Bundle 發布與安裝](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)
-- [DSH 工具開發](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/adding-a-tool.md)、[工具 registry](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/tools/README.md)
+- [DSH 發布](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.md)、[工具](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/cookbook/adding-a-tool.md)、[registry](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/core/tools/README.md)
 - [present](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/deliverables/tool-present/src/index.ts)、[ui-deliverables](https://github.com/deepseek-ai/deepseek-harness/blob/master/packages/client/ui-deliverables/README.md)
-- [Fish 建立私人聲線 multipart 範例](https://docs.fish.audio/features/voice-cloning)、[Create Model schema](https://docs.fish.audio/api-reference/endpoint/model/create-model)
-- [Fish TTS schema 與錯誤](https://docs.fish.audio/api-reference/endpoint/openapi-v1/text-to-speech)、[Drama 3 語氣標籤](https://docs.fish.audio/features/text-to-speech/drama-3)
+- [Fish 私人聲線](https://docs.fish.audio/features/voice-cloning)、[Create Model](https://docs.fish.audio/api-reference/endpoint/model/create-model)、[TTS](https://docs.fish.audio/api-reference/endpoint/openapi-v1/text-to-speech)、[Drama 3](https://docs.fish.audio/features/text-to-speech/drama-3)
 
-官方文件 master 與本機 rc.5 有差異；實作與原生測試以本機安裝的 API 為準。例如 rc.5 present 使用 sessionProjections，不能直接套用新版 master 的 agents API。
+以現場 rc.5 API 為準，不假定 master 與本機一致。Fish 使用 POST /model 建私有聲線與 POST /v1/tts、model: drama-3 標頭，不猜測 privatevoice TTS 路徑。

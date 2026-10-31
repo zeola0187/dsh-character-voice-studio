@@ -1,5 +1,13 @@
 import {readdir,readFile} from 'node:fs/promises';
 import assert from 'node:assert/strict';
+import {settingsWire} from '../src/settings-wire.js';
+import {inspectSelectedWav,bytesToBase64,createSettingsComponent} from '../src/settings-ui.js';
+import {clientEntry} from '../src/client-entry.js';
 const p=JSON.parse(await readFile('package.json','utf8'));assert(!p.scripts.prepare);assert(p.dsh.bundle.patch);assert(p.engines.dsh==='0.2.1-rc.5');
 for(const n of await readdir('src'))if(n.endsWith('.js'))assert((await readFile('src/'+n)).equals(await readFile('lib/'+n)),`Stale lib/${n}`);
-console.log('Package metadata and committed executable lib match source.');
+const expected=`window.__ModuleLoader__.load({id:'dsh-character-voice-studio',factory(require){\nconst React=require('react'),z=require('zod').z;\n${settingsWire}\n${inspectSelectedWav}\n${bytesToBase64}\n${createSettingsComponent}\n${clientEntry}\nreturn clientEntry(React,z,settingsWire,createSettingsComponent);\n}});\n`;
+assert.equal(await readFile('lib/client.js','utf8'),expected,'Stale compiled client bundle');
+for(const entry of ['./settings','./client','./typert'])assert(p.exports[entry]);
+assert(p.dsh.client.immediately);assert(p.dsh.client.inject.includes('@deepseek-ai/dsh-client-ui-settings'));
+assert((await readFile('cordis.patch.yml','utf8')).includes('dsh-character-voice-studio/settings'));
+console.log('Package metadata, settings wiring and committed executable lib/client match source.');
