@@ -6,16 +6,16 @@ DSH 原生插件：自然語言台詞與表演指示 → Fish Audio Drama 3 → 
 
 ## 安裝
 
-支援已核實的 **DSH 0.2.1-rc.5**。rc.3 的 Git 安裝與原生設定模組已在隔離 profile 實測。使用下方候選版安裝字串；私有倉庫需要擁有存取權的 GitHub 帳號與既有 Git Credential Manager 登入，不要在 URL 放 Token。日常桌面 UI 與真實付費生成的驗證範圍見測試報告。
+支援已核實的 **DSH 0.2.1-rc.5**。rc.3 的 Git 安裝與原生設定模組已在隔離 profile 實測。候選程式已推送 main；rc.3 tag 發布仍待授權，尚未建立。下方使用 main，重現確切版本時可改用交付紀錄的完整 commit SHA。私有倉庫需要擁有存取權的 GitHub 帳號與既有 Git Credential Manager 登入，不要在 URL 放 Token。日常桌面 UI 與真實付費生成的驗證範圍見測試報告。
 
 ```text
-github:zeola0187/dsh-character-voice-studio#v0.1.0-rc.3
+github:zeola0187/dsh-character-voice-studio#main
 ```
 
 官方 CLI 備用安裝方式（本機實際路徑與 profile）：
 
 ```powershell
-& 'E:\DSH\resources\runtime\cli\bin\dsh.cmd' plugin --profile desktop add 'github:zeola0187/dsh-character-voice-studio#v0.1.0-rc.3'
+& 'E:\DSH\resources\runtime\cli\bin\dsh.cmd' plugin --profile desktop add 'github:zeola0187/dsh-character-voice-studio#main'
 ```
 
 其他電腦可使用 PATH 中的 `dsh`。包含已編譯後端 JS 與 `lib/client.js`；Git 安裝不執行 build/prepare，不下載模型或原生音訊依賴。其他 DSH 版本需另驗；CLI 安裝結果不等同插件管理器實際點擊驗收。
