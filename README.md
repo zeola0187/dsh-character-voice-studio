@@ -6,7 +6,7 @@ DSH 原生插件：自然語言台詞與表演指示 → Fish Audio Drama 3 → 
 
 ## 安裝
 
-支援已核實的 **DSH 0.2.1-rc.5**。**rc.3 尚未推送／建立 tag**：自動核准審查阻擋提交與推送，等待補足授權。下方是發行後預定字串，目前請勿當作已驗證可安裝版本。遠端仍為 rc.2（尚無此設定頁）；rc.3 本機資料夾與打包檔已具備編譯資產。私有倉庫需要擁有存取權的 GitHub 帳號與既有 Git Credential Manager 登入，不要在 URL 放 Token。
+支援已核實的 **DSH 0.2.1-rc.5**。rc.3 的 Git 安裝與原生設定模組已在隔離 profile 實測。使用下方候選版安裝字串；私有倉庫需要擁有存取權的 GitHub 帳號與既有 Git Credential Manager 登入，不要在 URL 放 Token。日常桌面 UI 與真實付費生成的驗證範圍見測試報告。
 
 ```text
 github:zeola0187/dsh-character-voice-studio#v0.1.0-rc.3

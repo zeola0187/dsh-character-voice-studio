@@ -18,7 +18,8 @@ Candidate **0.1.0-rc.3**, Windows, Node 24.14.1, actual DSH **0.2.1-rc.5**. No r
 - npm pack dry-run includes all backend modules, compiled client, patch, fallback setup, example config and user-run live smoke. No audio/config/credentials packaged.
 - npm audit production dependencies: **0 vulnerabilities**. Plugin zod pinned to 4.6.7; Host dependencies untouched.
 - After the push rejection, completed independent local packaging verification: official CLI installed dsh-character-voice-studio-0.1.0-rc.3.tgz into a **fresh** voice-ui-package-verification profile. Actual packaged node_modules client asset passed ModuleLoader + strict schema + Gateway save/get/clear probe. Evidence: test-output/settings-profile-probe-packed-fresh.json. No development symlink was used for this final run. The earlier reused profile retained a development symlink and is not counted as packed-install evidence.
-- Tested local archive SHA256: E26056B40F2645436223733A7E075FD8F77C64284153BC0EF7F6AD74EEA0CF17. Archive includes the code and report as of packaging; this later verification entry exists in the workspace report. No rc.3 Git tag exists yet.
+- Tested initial local archive SHA256: E26056B40F2645436223733A7E075FD8F77C64284153BC0EF7F6AD74EEA0CF17. That archive predates the release documentation update; the runtime code is unchanged. Prefer the fixed rc.3 Git tag for current documentation.
+- Git commit **08eca6a5c4e1915c7f7724dd89c9425d61d85830** pushed and remote readback matched. Official CLI installed github:zeola0187/dsh-character-voice-studio#08eca6a into a **fresh voice-ui-git-verification** profile. The actual Git-installed client asset, strict descriptor and Gateway probe passed (**VOICE_SETTINGS_PROFILE_PROBE_PASS**, test-output/settings-profile-probe-git.json). Release documentation/tag does not change this runtime.
 
 ## Earlier baseline evidence retained
 
@@ -31,7 +32,7 @@ Candidate **0.1.0-rc.3**, Windows, Node 24.14.1, actual DSH **0.2.1-rc.5**. No r
 
 ## Pending / not claimed
 
-- rc.3 Git push/tag and real desktop deployment are **blocked/pending**. Auto approval review rejected the combined git commit + push to private main because it did not recognize trusted user authorization for this push. The command was not executed; confirmed HEAD remains e691f82bb492b029ba085956130c24f52dbd7eaf and rc.3 changes are staged locally. No retry, alternate push, force push, tag or desktop install was attempted after rejection. Existing real desktop remains rc.2. Await a new, relevant authorization clarification before retrying that rejected action.
+- The first commit/push attempt was rejected because automatic review did not recognize the user's original push authorization. It did not execute. After the parent supplied exact original user authorization, one normal retry succeeded; no alternate route or force push was used. Git publication is no longer blocked. Desktop visual acceptance remains pending as described below.
 - **Real desktop settings UI and file picker end-to-end**. Source/component/native loader/host RPC tests passed, but no screenshot or desktop click validation. Prior automation encountered geometry/concurrent-input limits. Parent reports another task's whole-window screenshot was denied for private-chat exposure; this update does not retry or bypass that capture. No restart is authorized for this update.
 - True Fish private voice creation and paid Drama 3 audio response; likeness, expression, Chinese naturalness, long-text stability. No Key/material/paid authorization supplied.
 - Natural-language DSH model → voice tools → real conversation present/download flow. No unrelated model-spend authorization reused.
