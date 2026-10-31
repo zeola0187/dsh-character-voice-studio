@@ -1,6 +1,7 @@
 import { setTimeout as sleep } from 'node:timers/promises';
 import { VoiceError,fail } from './errors.js';
 import { MAX_AUDIO_BYTES } from './audio.js';
+import { normalizeFishWav } from './fish-wav.js';
 export class FishProvider {
   constructor(config,fetcher=fetch){this.config=config;this.fetcher=fetcher;}
   async request(route,options,signal,{readOnly=false,maxBytes=MAX_AUDIO_BYTES}={}) {
@@ -27,7 +28,9 @@ export class FishProvider {
   }
   async generate({text,direction,referenceId},signal) {
     const script=direction?`[${direction}]${text}`:text;
-    return this.request('/v1/tts',{method:'POST',headers:{'Content-Type':'application/json',model:'drama-3'},body:JSON.stringify({text:script,reference_id:referenceId,format:'wav',sample_rate:44100,normalize:false,latency:'normal'})},signal);
+    const bytes=await this.request('/v1/tts',{method:'POST',headers:{'Content-Type':'application/json',model:'drama-3'},body:JSON.stringify({text:script,reference_id:referenceId,format:'wav',sample_rate:44100,normalize:false,latency:'normal'})},signal);
+    signal?.throwIfAborted();
+    return normalizeFishWav(bytes);
   }
   async createVoice({name,audio,transcript},signal) {
     const body=new FormData();for(const [k,v]of Object.entries({type:'tts',title:name,train_mode:'fast',visibility:'private',generate_sample:'false',enhance_audio_quality:'false'}))body.append(k,v);

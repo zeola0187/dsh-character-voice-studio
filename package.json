@@ -1,6 +1,6 @@
 {
   "name": "dsh-character-voice-studio",
-  "version": "0.1.0-rc.3",
+  "version": "0.1.0-rc.4",
   "private": true,
   "description": "Native DSH character voice file generation with Fish Audio Drama 3",
   "type": "module",

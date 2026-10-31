@@ -2,11 +2,11 @@
 
 DSH 原生插件：自然語言台詞與表演指示 → Fish Audio Drama 3 → 有效 WAV → DSH `present` 檔案交付。沒有第二個 LLM、播放器、麥克風或本機 GPU 推論。
 
-目前是 **0.1.0-rc.3 候選版**，加入原生設定與 WAV 選檔建聲線流程。真實 Fish 音訊與日常桌面 UI 端到端仍待驗證，詳見 [TEST-RESULTS.md](TEST-RESULTS.md)。
+目前是 **0.1.0-rc.4 候選版**，修正 Fish 已知 WAV 佔位標頭被誤判為下載不完整，保留原生設定與 WAV 選檔建聲線流程。66 項離線測試及既有回應樣本的本機記憶體驗證通過；本次沒有重跑付費生成，詳見 [TEST-RESULTS.md](TEST-RESULTS.md)。
 
 ## 安裝
 
-支援已核實的 **DSH 0.2.1-rc.5**。rc.3 的 Git 安裝與原生設定模組已在隔離 profile 實測。候選程式已推送 main；rc.3 tag 發布仍待授權，尚未建立。下方使用 main，重現確切版本時可改用交付紀錄的完整 commit SHA。私有倉庫需要擁有存取權的 GitHub 帳號與既有 Git Credential Manager 登入，不要在 URL 放 Token。日常桌面 UI 與真實付費生成的驗證範圍見測試報告。
+支援已核實的 **DSH 0.2.1-rc.5**。rc.3 的 Git 安裝與原生設定模組已在隔離 profile 實測，rc.4 沿用相同接線。本版不建立 release/tag。下方使用 main，重現確切版本時可改用交付紀錄的完整 commit SHA。私有倉庫需要擁有存取權的 GitHub 帳號與既有 Git Credential Manager 登入，不要在 URL 放 Token。各版本驗證範圍見測試報告。
 
 ```text
 github:zeola0187/dsh-character-voice-studio#main
@@ -21,6 +21,8 @@ github:zeola0187/dsh-character-voice-studio#main
 其他電腦可使用 PATH 中的 `dsh`。包含已編譯後端 JS 與 `lib/client.js`；Git 安裝不執行 build/prepare，不下載模型或原生音訊依賴。其他 DSH 版本需另驗；CLI 安裝結果不等同插件管理器實際點擊驗收。
 
 ## 第一次使用：在 DSH 設定完成
+
+**安裝後若「角色語音」設定頁未出現，請重新開啟 DSH。** 安裝成功與目前前端已重新載入是兩回事；既有 Key／聲線設定的儲存則立即生效，不需每次重開。本次交付不會代替您更新或重啟 DSH。
 
 1. 開啟 **設定 → 角色語音**。插件管理器中此插件的設定區也使用同一頁。
 2. 輸入 **Fish Audio API Key**，本人確認素材使用權與可能費用，再按「儲存設定」。既有 Key 只顯示已設定，不回填原值；留空儲存會保留，另按「移除 Key」才會刪除。設定立即生效。
@@ -69,6 +71,10 @@ Key 保存本機設定，**不是 OS 密碼庫加密儲存**，請保護該使�
 工具遵守 DSH scope/restrictions，沒有放寬檔案權限或改其他插件。rc.5 standard/ptc/cordis 均包含 present，web bundle 有 ui-deliverables；自訂 preset 需自行包含 present。
 
 ## 音訊、限制與錯誤
+
+rc.4 僅在 Fish TTS 回應完整讀到 HTTP EOF 後，接受已知的 `RIFF=0xFFFFFF24` / `data=0xFFFFFF00` 佔位長度。限定標準 44-byte 標頭、fmt 長度 16、PCM16、單聲道、44.1kHz，且 data 在固定 chunk 邊界；不搜尋字串 `data`，不將任意超長宣告改為實際長度。轉換只改副本的兩個長度欄位，PCM 不變。一般 WAV／參考音檔仍嚴格驗證，缺少奇數 chunk padding、未知佔位、RF64 或不符合限定的佔位 layout 都不自動修補。
+
+這項相容處理限定 Fish 的「data 延伸至回應 EOF」契約：已正常結束但提早截短、仍對齊的 PCM，或被當作 PCM 傳送的尾端 metadata，無法單靠 bytes 判別。串流報錯／取消會失敗且不重試付費 POST；**解析成功不代表原台詞完整，也不能用尾端低音量證明完整**。本版沒有播放或轉錄私人樣本；請在自行更新後，以本人允許的生成測試確認效果。
 
 照念保留原文；segments 各段 text 接起來必須和總 text 完全相同。省略分段 direction 時沿用主 direction。Fish 使用 normalize:false。台詞的 `[]<>` 保留符號會拒絕，避免與指令混淆。
 

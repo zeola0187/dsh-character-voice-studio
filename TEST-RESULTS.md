@@ -1,4 +1,25 @@
-# Verification record — 2026-10-31
+# Verification record — rc.4 WAV compatibility update
+
+Current package: **0.1.0-rc.4**, Windows / Node 24.14.1. This update changes Fish response adaptation and strict WAV chunk boundaries, not DSH UI wiring. No real key was read, no paid API was called, no reference material was uploaded, and the installed desktop profile was not updated or restarted. No release/tag is created. The historical rc.3 results below remain explicitly scoped to that version.
+
+## rc.4 results
+
+- **66/66 offline tests passed**: existing 46 plus 20 new synthetic regressions in test/fish-wav.test.js. No skipped or cancelled tests.
+- Normal finite WAV and ancillary/trailing chunks remain byte-identical. Known Fish placeholder responses become finite WAV only at FishProvider.generate, after the body reader completes. General decodeWav and reference import do not gain placeholder acceptance.
+- Strict parser checks include chunk payload plus mandatory odd-length padding; missing/duplicate fmt/data, partial headers, payload overruns, PCM alignment and high-bit identifier aliases are rejected. RF64 remains unsupported.
+- Provider exception is limited to the exact 0xffffff24 / 0xffffff00 pair and canonical 44-byte PCM16 mono 44100Hz header. Mismatched/unknown sentinels, noncanonical placeholder layouts and arbitrary finite oversized declarations are rejected. No indexOf(data) search, no heuristic metadata stripping.
+- Synthetic regressions cover false data patterns in JUNK and PCM, ordinary aligned/unaligned truncation, placeholder misalignment, empty/oversized input, byte ownership, arbitrary HTTP chunk splits, transport interruption and cancellation, no paid POST retry, two consecutive service generations, no partial output on first-segment failure, busy recovery, and exact 88,200 silent frames between segments.
+- Two existing user-provided responses were read **only locally**, passed through the actual FishProvider with an injected in-memory fetcher, then decoded and joined in memory. Sizes: 65,580 and 1,105,964 bytes; payloads: 65,536 and 1,105,920 bytes. Adapted payload durations: 0.7430385487528345 and 12.538775510204081 seconds. PCM bytes and original-file SHA256 values remained unchanged. Joined duration: 15.281814058956916 seconds including exactly two seconds of added silence. No output copy, playback, transcription or network request was made for these private samples. Sample bytes, private paths, original dialogue and diagnostic logs are not repository fixtures.
+- The response EOF contract cannot prove semantic completion: an aligned early EOF is indistinguishable from a shorter response; unknown-size data cannot reliably separate metadata from PCM at the tail. Tests explicitly record these limits instead of claiming such cases are detected. Low trailing amplitude is not evidence of completeness.
+- npm run build / npm run check verify source and shipped lib match. npm pack --dry-run confirms 23 packaged files, including lib/fish-wav.js and lib/client.js, with no private audio/config/test-output files. Test fixtures are generated synthetic bytes only.
+- GitHub reports zero configured Actions workflows; there is no hosted CI run to claim. The validation above was executed locally.
+- README now tells users to reopen DSH if the settings page is absent after installation. This is an instruction for the user; no restart or installed-profile mutation was performed.
+
+Reference: [Fish's documented WAV placeholder values](https://docs.fish.audio/developer-guide/compat/capabilities#audio-formats). That page describes compatible APIs; the same exact pair was independently observed in the provided native TTS responses. No claim is made about when Fish introduced the behavior.
+
+Remaining acceptance: the user must update/install the delivered commit and explicitly initiate their own permitted real generation, listening and present/download checks. This update's sample and synthetic tests do not establish complete spoken text, voice similarity or direction quality. Repository CI availability is checked at delivery; local test success must not be described as a hosted CI pass.
+
+## Historical rc.3 verification — 2026-10-31
 
 Candidate **0.1.0-rc.3**, Windows, Node 24.14.1, actual DSH **0.2.1-rc.5**. No real Fish Key or private voice material supplied. All audio in automated tests is synthetic. No paid Fish or DSH model requests. No GPU/model installation. Other projects and dsh-fish were not modified by this update.
 

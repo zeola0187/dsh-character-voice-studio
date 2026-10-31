@@ -3,17 +3,18 @@ export const RATE = 44100;
 export const MAX_AUDIO_BYTES = 64 * 1024 * 1024;
 export function decodeWav(bytes) {
   const b = Buffer.from(bytes);
-  if (b.length < 44 || b.length > MAX_AUDIO_BYTES || b.toString('ascii',0,4) !== 'RIFF' || b.toString('ascii',8,12) !== 'WAVE') fail('INVALID_AUDIO','雲端未傳回有效 WAV。');
+  if (b.length < 44 || b.length > MAX_AUDIO_BYTES || b.toString('latin1',0,4) !== 'RIFF' || b.toString('latin1',8,12) !== 'WAVE') fail('INVALID_AUDIO','雲端未傳回有效 WAV。');
   const end = b.readUInt32LE(4)+8;
   if (end !== b.length) fail('INVALID_AUDIO','WAV 長度不符，可能下載不完整。');
   let fmt, pcm;
   for (let p=12;p<end;) {
     if (p+8>end) fail('INVALID_AUDIO','WAV chunk 標頭損毀。');
-    const id=b.toString('ascii',p,p+4), size=b.readUInt32LE(p+4), start=p+8;
-    if (start+size>end) fail('INVALID_AUDIO','WAV chunk 不完整。');
+    const id=b.toString('latin1',p,p+4), size=b.readUInt32LE(p+4), start=p+8;
+    const next=start+size+(size%2);
+    if (next>end) fail('INVALID_AUDIO','WAV chunk 或對齊 padding 不完整。');
     if(id==='fmt ') { if(fmt || size<16) fail('INVALID_AUDIO','WAV fmt 無效。'); fmt=b.subarray(start,start+size); }
     if(id==='data') { if(pcm) fail('INVALID_AUDIO','WAV 包含重複 data。'); pcm=b.subarray(start,start+size); }
-    p=start+size+(size%2);
+    p=next;
   }
   if(!fmt || !pcm?.length) fail('EMPTY_AUDIO','WAV 沒有音訊資料。');
   const channels=fmt.readUInt16LE(2), rate=fmt.readUInt32LE(4), align=fmt.readUInt16LE(12);
