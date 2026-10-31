@@ -1,0 +1,12 @@
+{
+  "fishApiKey": "",
+  "defaultReferenceId": "",
+  "defaultProfile": "",
+  "outputDirectory": "",
+  "defaultFormat": "wav",
+  "rightsConfirmed": false,
+  "allowPaidRequests": false,
+  "allowReferenceUpload": false,
+  "timeoutMs": 120000,
+  "cloudVoxCPM": {"endpoint": "", "apiKey": "", "protocol": "unconfigured"}
+}

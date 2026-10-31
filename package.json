@@ -1,0 +1,15 @@
+{
+  "name": "dsh-character-voice-studio",
+  "version": "0.1.0-rc.1",
+  "private": true,
+  "description": "Native DSH character voice file generation with Fish Audio Drama 3",
+  "type": "module",
+  "main": "lib/plugin.js",
+  "exports": {".": "./lib/plugin.js", "./package.json": "./package.json"},
+  "files": ["lib", "cordis.patch.yml", "config.example.json", "setup.ps1", "setup.cmd", "README.md", "TEST-RESULTS.md"],
+  "engines": {"node": ">=24.14.1", "dsh": "0.2.1-rc.5"},
+  "dsh": {"bundle": {"patch": "./cordis.patch.yml"}},
+  "peerDependencies": {"@deepseek-ai/dsh-tools": "0.2.1-rc.5"},
+  "peerDependenciesMeta": {"@deepseek-ai/dsh-tools": {"optional": true}},
+  "scripts": {"build": "node scripts/build.mjs", "test": "node --test test/*.test.js", "check": "node scripts/check.mjs", "smoke:live": "node scripts/live-smoke.mjs"}
+}
