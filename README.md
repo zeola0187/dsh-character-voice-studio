@@ -2,23 +2,27 @@
 
 DSH 原生插件：自然語言台詞與表演指示 → Fish Audio Drama 3 → 有效 WAV → DSH `present` 檔案交付。沒有第二個 LLM、播放器、麥克風或本機 GPU 推論。
 
-目前是 **0.1.0-rc.4 候選版**，修正 Fish 已知 WAV 佔位標頭被誤判為下載不完整，保留原生設定與 WAV 選檔建聲線流程。66 項離線測試及既有回應樣本的本機記憶體驗證通過；本次沒有重跑付費生成，詳見 [TEST-RESULTS.md](TEST-RESULTS.md)。
+正式版 **0.1.0**，以 MIT 授權發布。使用者已確認插件驗收通過；封版維持 rc.4 的生成邏輯，另完成離線回歸與公開前授權／隱私檢查。驗證範圍見 [TEST-RESULTS.md](TEST-RESULTS.md)，交接見 [HANDOFF.md](HANDOFF.md)。
 
 ## 安裝
 
-支援已核實的 **DSH 0.2.1-rc.5**。rc.3 的 Git 安裝與原生設定模組已在隔離 profile 實測，rc.4 沿用相同接線。本版不建立 release/tag。下方使用 main，重現確切版本時可改用交付紀錄的完整 commit SHA。私有倉庫需要擁有存取權的 GitHub 帳號與既有 Git Credential Manager 登入，不要在 URL 放 Token。各版本驗證範圍見測試報告。
+支援已核實的 **DSH 0.2.1-rc.5**。在插件管理頁安裝以下 Git 來源（固定正式版）：
 
 ```text
-github:zeola0187/dsh-character-voice-studio#main
+github:zeola0187/dsh-character-voice-studio#v0.1.0
 ```
 
-官方 CLI 備用安裝方式（本機實際路徑與 profile）：
+也可貼 [GitHub 首頁](https://github.com/zeola0187/dsh-character-voice-studio) 安裝 main；固定 tag 較適合重現版本。公開倉庫下載不需要本插件提供任何 GitHub Token。包含已編譯後端 JS 與 lib/client.js；Git 安裝不執行 build/prepare，不下載模型或原生音訊依賴。
+
+**更新既有 Git 插件：** rc.5 沒有一般 Git 插件的升級按鈕；先在插件管理頁移除此插件，再用上面的固定來源安裝。不保證重貼相同首頁就能刷新已鎖定的 commit。正常移除插件不刪除使用者目錄中的本插件 Key／聲線設定；不要手動刪除該資料目錄。自訂設定或輸出若放在套件目錄內則不在這項保留保證內。
+
+官方 CLI 備用方式（DSH CLI 需在 PATH，profile 換成實際名稱；一般使用者使用圖形介面即可）：
 
 ```powershell
-& 'E:\DSH\resources\runtime\cli\bin\dsh.cmd' plugin --profile desktop add 'github:zeola0187/dsh-character-voice-studio#main'
+dsh plugin --profile desktop add 'github:zeola0187/dsh-character-voice-studio#v0.1.0'
 ```
 
-其他電腦可使用 PATH 中的 `dsh`。包含已編譯後端 JS 與 `lib/client.js`；Git 安裝不執行 build/prepare，不下載模型或原生音訊依賴。其他 DSH 版本需另驗；CLI 安裝結果不等同插件管理器實際點擊驗收。
+既有 Git 安裝與設定模組曾在隔離 profile 實測；本次封版不代為更新正式 profile。其他 DSH 版本、平台及重新安裝後的實際前端狀態需另驗。
 
 ## 第一次使用：在 DSH 設定完成
 
@@ -34,7 +38,7 @@ github:zeola0187/dsh-character-voice-studio#main
 
 GUI 建立成功會保存聲線、設為預設，並記錄本人允許後續按其指令生成與可能費用；**不會開放模型任意上傳其他 WAV**。刪除本機聲線記錄不刪原始 WAV 或 Fish 遠端聲線。
 
-原生設定使用 rc.5 官方 settings.section、plugins.bundle.config、ModuleLoader 和 Typert RPC。早期只有 CMD 是實作範圍選擇，不是 DSH 無法提供原生頁面。`setup.cmd`／`setup.ps1` 僅保留作進階排障備用。
+原生設定使用 rc.5 官方 settings.section、plugins.bundle.config、ModuleLoader 和 Typert RPC。`setup.cmd`／`setup.ps1` 僅保留作進階排障備用。
 
 ## 三句對話範例
 
@@ -72,9 +76,9 @@ Key 保存本機設定，**不是 OS 密碼庫加密儲存**，請保護該使�
 
 ## 音訊、限制與錯誤
 
-rc.4 僅在 Fish TTS 回應完整讀到 HTTP EOF 後，接受已知的 `RIFF=0xFFFFFF24` / `data=0xFFFFFF00` 佔位長度。限定標準 44-byte 標頭、fmt 長度 16、PCM16、單聲道、44.1kHz，且 data 在固定 chunk 邊界；不搜尋字串 `data`，不將任意超長宣告改為實際長度。轉換只改副本的兩個長度欄位，PCM 不變。一般 WAV／參考音檔仍嚴格驗證，缺少奇數 chunk padding、未知佔位、RF64 或不符合限定的佔位 layout 都不自動修補。
+Fish TTS 相容處理僅在 回應完整讀到 HTTP EOF 後，接受已知的 `RIFF=0xFFFFFF24` / `data=0xFFFFFF00` 佔位長度。限定標準 44-byte 標頭、fmt 長度 16、PCM16、單聲道、44.1kHz，且 data 在固定 chunk 邊界；不搜尋字串 `data`，不將任意超長宣告改為實際長度。轉換只改副本的兩個長度欄位，PCM 不變。一般 WAV／參考音檔仍嚴格驗證，缺少奇數 chunk padding、未知佔位、RF64 或不符合限定的佔位 layout 都不自動修補。
 
-這項相容處理限定 Fish 的「data 延伸至回應 EOF」契約：已正常結束但提早截短、仍對齊的 PCM，或被當作 PCM 傳送的尾端 metadata，無法單靠 bytes 判別。串流報錯／取消會失敗且不重試付費 POST；**解析成功不代表原台詞完整，也不能用尾端低音量證明完整**。本版沒有播放或轉錄私人樣本；請在自行更新後，以本人允許的生成測試確認效果。
+這項相容處理限定 Fish 的「data 延伸至回應 EOF」契約：已正常結束但提早截短、仍對齊的 PCM，或被當作 PCM 傳送的尾端 metadata，無法單靠 bytes 判別。串流報錯／取消會失敗且不重試付費 POST；**解析成功不代表原台詞完整，也不能用尾端低音量證明完整**。更新後仍建議以自己有權使用的內容確認效果。
 
 照念保留原文；segments 各段 text 接起來必須和總 text 完全相同。省略分段 direction 時沿用主 direction。Fish 使用 normalize:false。台詞的 `[]<>` 保留符號會拒絕，避免與指令混淆。
 
@@ -105,3 +109,9 @@ npm run check
 - [Fish 私人聲線](https://docs.fish.audio/features/voice-cloning)、[Create Model](https://docs.fish.audio/api-reference/endpoint/model/create-model)、[TTS](https://docs.fish.audio/api-reference/endpoint/openapi-v1/text-to-speech)、[Drama 3](https://docs.fish.audio/features/text-to-speech/drama-3)
 
 以現場 rc.5 API 為準，不假定 master 與本機一致。Fish 使用 POST /model 建私有聲線與 POST /v1/tts、model: drama-3 標頭，不猜測 privatevoice TTS 路徑。
+
+## 授權、費用與聲音權利
+
+本插件自有程式採 [MIT](LICENSE)，第三方依賴歸屬見 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)；公開前工程審查見 [PUBLIC-REVIEW.md](PUBLIC-REVIEW.md)。MIT 不授予 Fish 模型、聲線、錄音、角色素材或商標的權利，也不取代服務條款。這是獨立社群插件，並非 DeepSeek 或 Fish Audio 官方產品。
+
+每位使用者須使用自己的 Fish 帳號與 API Key，承擔 [Drama 3 費用](https://docs.fish.audio/features/text-to-speech/drama-3#pricing)，並遵守 [Fish 服務條款](https://fish.audio/terms/)及 [隱私政策](https://fish.audio/privacy/)。是否可商用取決於帳號適用條款與方案，不能因插件 MIT 就推定生成內容可無條件商用。上傳前須取得錄音、聲音／肖像及文本必要權利；private 聲線仍會交由 Fish 處理，不等於離線或免除其資料條款。

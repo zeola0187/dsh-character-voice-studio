@@ -1,6 +1,6 @@
 {
   "name": "dsh-character-voice-studio",
-  "version": "0.1.0-rc.4",
+  "version": "0.1.0",
   "private": true,
   "description": "Native DSH character voice file generation with Fish Audio Drama 3",
   "type": "module",
@@ -20,7 +20,11 @@
     "setup.ps1",
     "setup.cmd",
     "README.md",
-    "TEST-RESULTS.md"
+    "TEST-RESULTS.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md",
+    "PUBLIC-REVIEW.md",
+    "HANDOFF.md"
   ],
   "engines": {
     "node": ">=24.14.1",
@@ -63,10 +67,17 @@
     "build": "node scripts/build.mjs",
     "test": "node --test test/*.test.js",
     "check": "node scripts/check.mjs",
-    "smoke:live": "node scripts/live-smoke.mjs"
+    "smoke:live": "node scripts/live-smoke.mjs",
+    "audit:public": "node scripts/audit-public.mjs"
   },
   "devDependencies": {
     "react": "18.3.1",
     "react-test-renderer": "18.3.1"
+  },
+  "license": "MIT",
+  "author": "Zeolas (zeola0187)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zeola0187/dsh-character-voice-studio.git"
   }
 }
