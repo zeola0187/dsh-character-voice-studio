@@ -12,7 +12,7 @@
 & 'E:\DSH\resources\runtime\cli\bin\dsh.cmd' plugin --profile desktop add github:zeola0187/dsh-character-voice-studio
 ```
 
-這是目前電腦上的 CLI 絕對路徑。其他電腦可用已加入 PATH 的 `dsh plugin --profile desktop add ...`。私有倉庫使用既有 GitHub/Git Credential Manager 登入，不把 Token 放進 URL。安裝字串的實測狀態見測試報告。
+這是目前電腦上的 CLI 絕對路徑。其他電腦可用已加入 PATH 的 `dsh plugin --profile desktop add ...`。私有倉庫使用既有 GitHub/Git Credential Manager 登入，不把 Token 放進 URL。上述 `github:` spec 與 GitHub 首頁 URL 均已由官方 CLI 實測安裝成功，且 Git 安裝後原生工具啟動通過；**插件管理頁直接貼 URL 的 UI 操作尚未驗證**，不要將 CLI 結果當成 UI 驗收。
 
 倉庫已包含可執行 `lib/*.js`，Git 安裝不需 build/prepare，不使用原生音訊依賴。`src/*.js` 是 ESM 原始碼，`npm run build` 將其精確複製成發布產物；`npm run check` 確認無過期產物。套件僅共享 Host 的 `@deepseek-ai/dsh-tools` optional peer。
 
