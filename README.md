@@ -10,20 +10,22 @@ DSH 原生插件：自然語言台詞與表演指示 → Fish Audio Drama 3 → 
 
 ## 安裝
 
-支援已核實的 **DSH 0.2.1-rc.5**。在插件管理頁安裝以下 Git 來源（固定正式版）：
+支援已核實的 **DSH 0.2.1-rc.5**。開啟 **插件管理 → 添加插件 → 包名或地址**，直接貼上專案首頁，再按安裝：
 
 ```text
-github:zeola0187/dsh-character-voice-studio#v0.1.0
+https://github.com/zeola0187/dsh-character-voice-studio
 ```
 
-也可貼 [GitHub 首頁](https://github.com/zeola0187/dsh-character-voice-studio) 安裝 main；固定 tag 較適合重現版本。公開倉庫下載不需要本插件提供任何 GitHub Token。包含已編譯後端 JS 與 lib/client.js；Git 安裝不執行 build/prepare，不下載模型或原生音訊依賴。
+首頁是一般使用者的正式安裝入口，不需要抄 `github:` 或 tag。DSH 將它辨識為 Git 來源，交給套件管理器解析預設分支。**目前預設分支是 main，版本為 0.1.0（含中文頁名）；不包含尚待驗收的 Voice Director 0.2.0-dev.1。** 待驗收並正式合併 main 後，新安裝才會取得新版；沒有為此改變預設分支。
 
-**更新既有 Git 插件：** rc.5 沒有一般 Git 插件的升級按鈕；先在插件管理頁移除此插件，再用上面的固定來源安裝。不保證重貼相同首頁就能刷新已鎖定的 commit。正常移除插件不刪除使用者目錄中的本插件 Key／聲線設定；不要手動刪除該資料目錄。自訂設定或輸出若放在套件目錄內則不在這項保留保證內。
+只有測試開發版時才使用 `github:zeola0187/dsh-character-voice-studio#feat/voice-director-v02`。需要重現歷史版本的進階使用者仍可固定 tag 或 commit SHA。公開倉庫下載不需要本插件提供任何 GitHub Token。包含已編譯後端 JS 與 lib/client.js；Git 安裝不執行 build/prepare，不下載模型或原生音訊依賴。
+
+**更新既有 Git 插件：** rc.5 沒有一般 Git 插件的升級按鈕；依管理頁提示先移除此插件，再用上面的首頁網址安裝。已辨識為安裝中的同一來源會遭到拒絕；改用另一種網址拼法也不是可靠的更新方式。安裝會保存解析結果與 lockfile，不能把重貼首頁、重新開啟 DSH 或 GitHub push 當成已更新。正常移除插件不刪除使用者目錄中的本插件 Key／聲線設定；不要手動刪除該資料目錄。自訂設定或輸出若放在套件目錄內則不在這項保留保證內。
 
 官方 CLI 備用方式（DSH CLI 需在 PATH，profile 換成實際名稱；一般使用者使用圖形介面即可）：
 
 ```powershell
-dsh plugin --profile desktop add 'github:zeola0187/dsh-character-voice-studio#v0.1.0'
+dsh plugin --profile desktop add 'https://github.com/zeola0187/dsh-character-voice-studio'
 ```
 
 既有 Git 安裝與設定模組曾在隔離 profile 實測；本次封版不代為更新正式 profile。其他 DSH 版本、平台及重新安裝後的實際前端狀態需另驗。

@@ -10,6 +10,10 @@ Date: 2026-11-01. Candidate feature branch, no stable release. Installed DSH 0.2
 
 Not verified: real paid Fish performance/listening, natural-language model selection/tool planning, or a live Desktop UI update. No cloud API, private audio upload, production profile edit, restart, main push or stable tag/release is part of this work. User-authorized real acceptance prompts are in VOICE-DIRECTOR.md; existing v0.1.0 acceptance does not establish these new effects.
 
+### Homepage installation documentation follow-up — 2026-11-01
+
+The actual installed rc.5 `parseInstallSpec` accepted both the HTTPS project homepage and the branch shorthand as `{kind:"git",host:"github.com"}`. Its UI advertises repository URLs and instructs remove/reinstall for third-party updates; backend `installBundle` rejects recognized already-installed dependencies under HMR. It delegates resolution to pnpm and stores profile dependencies/lockfiles; changing URL spelling is not a guaranteed refresh. Remote readback confirmed default branch `main`, package 0.1.0 at d32cd3b7342032589b0eed7e5b5d0d52136287be, versus feature branch package 0.2.0-dev.1. Only documentation was changed to make the homepage the normal entry; package metadata already supported this. No fresh homepage/branch URL installation was run in this follow-up, so those manifest observations are not reported as new installation passes. Earlier successful candidate install used the local tarball. No main/default-branch/tag/profile changes were made.
+
 ## Stable 0.1.0 verification history
 
 Date: 2026-10-31. Windows / Node 24.14.1 / installed DSH 0.2.1-rc.5.

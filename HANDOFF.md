@@ -7,16 +7,16 @@ Development branch: `feat/voice-director-v02`, based on main's Chinese-label cha
 - Repository: https://github.com/zeola0187/dsh-character-voice-studio
 - Version tag: [v0.1.0](https://github.com/zeola0187/dsh-character-voice-studio/tree/v0.1.0)
 - Release: https://github.com/zeola0187/dsh-character-voice-studio/releases/tag/v0.1.0
-- Install source: `github:zeola0187/dsh-character-voice-studio#v0.1.0`
+- Normal install source: `https://github.com/zeola0187/dsh-character-voice-studio` (current main: 0.1.0 with Chinese page name; not the unmerged 0.2 development candidate). Historical reproducibility pin: `github:zeola0187/dsh-character-voice-studio#v0.1.0`.
 - Supported/tested host: DSH **0.2.1-rc.5**, Windows, Node **24.14.1**. Final commit identity is available from the tag; use the full SHA in place of v0.1.0 when pinning a commit.
 
 ## 使用
 
-在 DSH 插件管理頁安裝。已安裝舊版時，rc.5 一般 Git 插件須先移除，再安裝固定版本；正常移除不刪本插件儲存在使用者目錄的設定。若設定頁未出現，由使用者重新開啟 DSH。
+在 DSH 插件管理頁的「包名或地址」貼上專案首頁安裝。已安裝舊版時，rc.5 一般 Git 插件須先移除，再用首頁安裝；正常移除不刪本插件儲存在使用者目錄的設定。若設定頁未出現，由使用者重新開啟 DSH；重開本身不會下載新版。開發版另用功能分支來源，待驗收後才可合併 main。
 
 到「設定 → 角色語音」填自己的 Fish API Key。選擇有權使用的 WAV、填角色名、確認這次雲端上傳與費用，再按「建立私人聲線並設為預設」。已有 ID 可在進階匯入。之後用自然語言要求台詞、語氣及停頓，成功後由 DSH present 交付 WAV。三句可直接使用的對話見 [README](README.md#三句對話範例)。一般操作不需要 CMD、路徑或 JSON。
 
-CLI 備用：`dsh plugin --profile desktop add 'github:zeola0187/dsh-character-voice-studio#v0.1.0'`。需使用實際 profile 和已加入 PATH 的官方 CLI；這份交接不表示已替使用者執行升級。
+CLI 備用：`dsh plugin --profile desktop add 'https://github.com/zeola0187/dsh-character-voice-studio'`。需使用實際 profile 和已加入 PATH 的官方 CLI；這份交接不表示已替使用者執行升級。
 
 ## Release change and acceptance
 
