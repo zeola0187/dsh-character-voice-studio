@@ -1,5 +1,9 @@
 # DSH Character Voice Studio
 
+> 此功能分支為 **0.2.0-dev.1 — AI Voice Director** 開發候選版。使用 `github:zeola0187/dsh-character-voice-studio#feat/voice-director-v02` 測試，或固定完整 commit SHA；穩定 `v0.1.0` 不包含本功能。既有安裝不會自動更新。
+
+新增隨插件提供、按需載入的 `character-voice-director` Skill：直接描述語氣、局部耳語/速度/重讀、呼吸/嘆息/笑聲與精確停頓，不需要手寫 Fish 標籤。新增免費離線 `preview_character_audio` 預覽；舊版生成、聲線設定與 WAV 交付保留。詳見 [功能契約、限制、安裝與三組自然語言測試](VOICE-DIRECTOR.md)。離線及原生隔離測試通過，不代表真實模型表演已驗收；真實付費生成仍待使用者確認。
+
 DSH 原生插件：自然語言台詞與表演指示 → Fish Audio Drama 3 → 有效 WAV → DSH `present` 檔案交付。沒有第二個 LLM、播放器、麥克風或本機 GPU 推論。
 
 正式版 **0.1.0**，以 MIT 授權發布。使用者已確認插件驗收通過；封版維持 rc.4 的生成邏輯，另完成離線回歸與公開前授權／隱私檢查。驗證範圍見 [TEST-RESULTS.md](TEST-RESULTS.md)，交接見 [HANDOFF.md](HANDOFF.md)。

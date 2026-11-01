@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "array",
+  "minItems": 1,
+  "maxItems": 100,
+  "description": "結構化表演節點；與 segments 互斥。speech.text 逐字串接必須等於 text。局部控制不增加請求；只有正值 pause 才切段。",
+  "items": {
+    "oneOf": [
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "text"
+        ],
+        "properties": {
+          "type": {
+            "const": "speech"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1500
+          },
+          "direction": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "controls": {
+            "type": "array",
+            "maxItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "whisper",
+                "emphasis",
+                "soft",
+                "fast",
+                "slow",
+                "stress",
+                "forceful"
+              ]
+            }
+          }
+        }
+      },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "event"
+        ],
+        "properties": {
+          "type": {
+            "const": "sound"
+          },
+          "event": {
+            "type": "string",
+            "enum": [
+              "breath",
+              "sigh",
+              "chuckle",
+              "laugh"
+            ]
+          }
+        }
+      },
+      {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "duration_ms"
+        ],
+        "properties": {
+          "type": {
+            "const": "pause"
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 30000
+          }
+        }
+      }
+    ]
+  }
+}

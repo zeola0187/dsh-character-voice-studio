@@ -1,4 +1,16 @@
-# Verification record — 0.1.0
+# Verification record — 0.2.0-dev.1
+
+Date: 2026-11-01. Candidate feature branch, no stable release. Installed DSH 0.2.1-rc.5 / build d4db512a969fccf0c5cc7ec8fe38e9c1d27af916.
+
+- Offline suite: **89 tests** including the original 66 regressions. New cases exercise all seven local controls, bracket events, mixed delivery in one request, exact 2-second PCM silence, leading/trailing/consecutive/zero pauses, Chinese/English/Japanese/whitespace/combining Unicode, exact text conservation, bad controls/raw tags/fields/Unicode, old/new conflicts, request/event/byte/pause budgets, preview without config, compiled Fish transport, continuous generation, partial failures and cancellation without retries or partial delivery. Synthetic PCM and Mock HTTP only.
+- Actual installed Cordis/Skill/tool consumer test passed: catalog has summary without body; the native `skill` tool loads instructions on demand; the real value-schema DSL accepts the structured request; preview, five plugin tools, inherited scopes/PTC schemas, missing-Key response and actual present event pass. Synthetic session/filesystem adapters are explicitly used for that standalone test.
+- **Official CLI package installation and Host boot passed** in a newly created isolated DSH_HOME/profile containing only base + the packed plugin. The installed bundle alone registered the Skill; native discovery, `skill` loading, preview compilation, 2-second pause plan, invalid enum rejection and friendly missing-Key response passed (`VOICE_DIRECTOR_INSTALLED_PROFILE_PASS`). No manual Skill copy, core edit, inherited desktop profile or actual model was used. The probe exits after verification.
+- An initial native check caught unsupported `minItems` in DSH's tool DSL; the implementation now translates full JSON Schema into that installed DSL and retains runtime limits. This is a fixed integration finding, not an outstanding failure.
+- Build/check verify committed JavaScript and generated JSON Schema against source. The pack includes 32 files and contains the Skill plus compiled compiler/provider/UI, with no native/new runtime dependency or install-time build. Privacy/credential scans include tracked/new files and all local Git history; no test output, voice, personal path or credential is shipped.
+
+Not verified: real paid Fish performance/listening, natural-language model selection/tool planning, or a live Desktop UI update. No cloud API, private audio upload, production profile edit, restart, main push or stable tag/release is part of this work. User-authorized real acceptance prompts are in VOICE-DIRECTOR.md; existing v0.1.0 acceptance does not establish these new effects.
+
+## Stable 0.1.0 verification history
 
 Date: 2026-10-31. Windows / Node 24.14.1 / installed DSH 0.2.1-rc.5.
 

@@ -1,4 +1,8 @@
-# 0.1.0 release handoff
+# 0.2.0-dev.1 feature branch handoff
+
+Development branch: `feat/voice-director-v02`, based on main's Chinese-label change. No stable tag, release, main update or Desktop deployment. See [Voice Director contract, limits and natural-language acceptance prompts](VOICE-DIRECTOR.md) and [current verification](TEST-RESULTS.md). This adds a packaged native DSH Skill, deterministic performance compiler, JSON Schema and offline preview. Production settings, WAV modules and providers beyond Fish are unchanged. Real cloud generation and model-driven natural-language acceptance remain unverified and need user authorization.
+
+## Stable 0.1.0 release history
 
 - Repository: https://github.com/zeola0187/dsh-character-voice-studio
 - Version tag: [v0.1.0](https://github.com/zeola0187/dsh-character-voice-studio/tree/v0.1.0)

@@ -1,6 +1,6 @@
 {
   "name": "dsh-character-voice-studio",
-  "version": "0.1.0",
+  "version": "0.2.0-dev.1",
   "private": true,
   "description": "Native DSH character voice file generation with Fish Audio Drama 3",
   "type": "module",
@@ -24,7 +24,10 @@
     "LICENSE",
     "THIRD_PARTY_NOTICES.md",
     "PUBLIC-REVIEW.md",
-    "HANDOFF.md"
+    "HANDOFF.md",
+    "skills",
+    "schemas",
+    "VOICE-DIRECTOR.md"
   ],
   "engines": {
     "node": ">=24.14.1",
